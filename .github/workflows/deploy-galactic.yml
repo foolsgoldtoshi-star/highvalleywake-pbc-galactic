@@ -39,7 +39,7 @@ jobs:
     - name: ⚙️ Install ClojureScript dependencies
       run: |
         cd site-dsl
-        npm ci
+        npm install
         
     - name: 🎊 Generate ClojureScript documentation
       run: |
