@@ -1,0 +1,77 @@
+{:paths ["src" "site-dsl/src" "web/src"]
+ 
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        org.clojure/clojurescript {:mvn/version "1.11.132"}
+        org.clojure/core.async {:mvn/version "1.6.681"}
+        
+        ;; 🌌 Galactic Infrastructure Dependencies
+        babashka/fs {:mvn/version "0.4.12"}
+        babashka/process {:mvn/version "0.0.3"}
+        
+        ;; 📚 Markdown Processing
+        markdown-clj {:mvn/version "0.9.62"}
+        
+        ;; 🎨 Web Development
+        hiccup {:mvn/version "2.0.0-RC3"}
+        ring {:mvn/version "1.10.0"}
+        ring/ring-defaults {:mvn/version "0.4.0"}
+        
+        ;; 🧠 AI Integration
+        clj-http {:mvn/version "3.12.3"}
+        cheshire {:mvn/version "5.11.0"}
+        
+        ;; 🌍 HTTP and Networking
+        http-kit {:mvn/version "2.6.0"}
+        clj-http {:mvn/version "3.12.3"}
+        
+        ;; 🔧 Utilities
+        clojure.java-time {:mvn/version "1.2.0"}
+        clj-time {:mvn/version "0.15.2"}
+        camel-snake-kebab {:mvn/version "0.4.3"}
+        
+        ;; 📊 Data Processing
+        clojure.data.json {:mvn/version "2.4.0"}
+        clojure.data.csv {:mvn/version "1.0.1"}
+        
+        ;; 🎯 Testing
+        org.clojure/test.check {:mvn/version "1.1.1"}
+        midje {:mvn/version "1.10.9"}}
+ 
+ :aliases
+ {:dev {:extra-deps {org.clojure/tools.namespace {:mvn/version "1.4.4"}
+                     org.clojure/tools.trace {:mvn/version "0.7.11"}
+                     cider/cider-nrepl {:mvn/version "0.44.0"}}
+        :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"]}
+  
+  :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.87.1366"}}
+         :main-opts ["-m" "kaocha.runner"]}
+  
+  :build {:main-opts ["-m" "site.core"]}
+  
+  :markdown-wiki {:main-opts ["-m" "markdown.wiki"]}
+  
+  :ai-blueprints {:main-opts ["-m" "ai.blueprints"]}
+  
+  ;; 🌌 Galactic Infrastructure Aliases
+  :galactic {:main-opts ["-m" "site.core"]}
+  :wiki {:main-opts ["-m" "markdown.wiki"]}
+  :ai {:main-opts ["-m" "ai.blueprints"]}
+  
+  ;; 🏗️ Build Aliases
+  :build:localhost {:main-opts ["-m" "build.localhost"]}
+  :build:github-pages {:main-opts ["-m" "build.github-pages"]}
+  
+  ;; 🧹 Maintenance Aliases
+  :clean {:main-opts ["-m" "maintenance.clean"]}
+  :health {:main-opts ["-m" "maintenance.health"]}}
+ 
+ :mvn/repos
+ {"central" {:url "https://repo1.maven.org/maven2/"}
+  "clojars" {:url "https://repo.clojars.org/"}}
+ 
+ :jvm-opts ["-Xmx2g" "-server"]
+ 
+ :global-vars {*warn-on-reflection* true
+               *assert* true
+               *print-length* 100
+               *print-level* 10}}

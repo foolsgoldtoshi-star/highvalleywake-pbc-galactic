@@ -1,113 +1,35 @@
-{:deps {zprint/zprint {:mvn/version "1.2.9"}
-        org.clojure/clojurescript {:mvn/version "1.11.132"}}
-
+{:paths ["site-dsl/src" "scripts"]
+ :deps  {org.clojure/clojurescript {:mvn/version "1.11.132"}
+         http-kit/http-kit        {:mvn/version "2.8.0"}
+         babashka/fs              {:mvn/version "0.5.20"}
+         zprint/zprint            {:mvn/version "1.2.9"}}
  :tasks
- {:requires ([babashka.fs :as fs]
-             [babashka.process :refer [shell]]
-             [clojure.string :as str])
-
-  ;; 🌌 GALACTIC INFRASTRUCTURE TASKS
-  
-  build:cljs-docs {:doc "Generate ClojureScript documentation DSL"
-                   :task (do (println "🧬 Generating ClojureScript documentation...")
-                             (shell {:dir "site-dsl"} "npm" "ci")
-                             (shell {:dir "site-dsl"} "npx" "shadow-cljs" "compile" "node-script")
-                             (shell {:dir "site-dsl"} "node" "target/main.js")
-                             (println "🎊 ClojureScript docs generation complete"))}
-
-  build:localhost {:doc "Build optimized for localhost development"
-                   :task (do (println "🌱 Building for localhost development...")
-                             (shell {:dir "build-systems/localhost"} "cp" "svelte.config.js" "../../web/")
-                             (shell {:dir "web"} "npm" "install")
-                             (shell {:dir "web"} "npm" "run" "build")
-                             (println "🖤 Localhost build complete"))}
-
-  build:github-pages {:doc "Build optimized for GitHub Pages deployment"
-                      :task (do (println "🌍 Building for GitHub Pages...")
-                                (shell {:dir "build-systems/github-pages"} "cp" "svelte.config.js" "../../web/")
-                                (shell {:dir "web"} "npm" "install" "--legacy-peer-deps")
-                                (shell {:dir "web" :env {"GITHUB_PAGES" "true" "PATH" (str (System/getenv "PATH"))}} "npm" "run" "build")
-                                (println "🚀 GitHub Pages build complete"))}
-
-  build:all-localhost {:doc "Complete localhost build pipeline"
-                       :depends [build:cljs-docs build:localhost]
-                       :task (println "🌽 Complete localhost infrastructure ready!")}
-
-  build:all-github-pages {:doc "Complete GitHub Pages build pipeline"
-                          :depends [build:cljs-docs build:github-pages]
-                          :task (println "🌌 Complete GitHub Pages infrastructure ready!")}
-
-  ;; 🧹 MAINTENANCE
-  clean {:doc "Clean all build artifacts"
-         :task (do (fs/delete-tree "web/dist" {:force true})
-                   (fs/delete-tree "web/.svelte-kit" {:force true})
-                   (fs/delete-tree "site-dsl/target" {:force true})
-                   (println "🧹 Build artifacts cleaned"))}
-
-  ;; 🚀 DEVELOPMENT & SERVING
-  bootstrap {:doc "Bootstrap galactic environment"
-             :task (do (println "🌌 Bootstrapping galactic infrastructure...")
-                       (shell "bb" "clean")
-                       (shell "bb" "build:all-localhost")
-                       (println "🎊 Galactic environment ready!"))}
-
-  dev {:doc "Start development mode with live reload"
-       :task (do (println "🌱 Starting development mode...")
-                 (shell {:dir "build-systems/localhost"} "cp" "svelte.config.js" "../../web/")
-                 (shell {:dir "web"} "npm" "install")
-                 (println "🚀 Development server starting...")
-                 (shell {:dir "web"} "npm" "run" "dev"))}
-
-  serve {:doc "Serve the built site locally"
-         :task (do (println "🚀 Starting local server...")
-                   (shell {:dir "web"} "npx" "sirv" "dist" "--port" "8080" "--single")
-                   (println "🌐 Server running on http://localhost:8080"))}
-
-  serve:localhost {:doc "Serve localhost build"
-                   :task (do (println "🌱 Serving localhost build...")
-                             (shell "bb" "build:all-localhost")
-                             (shell "bb" "serve"))}
-
-  serve:github-pages-test {:doc "Test production build locally"
-                           :task (do (println "🌍 Testing GitHub Pages build locally...")
-                                     (shell "bb" "build:all-github-pages")
-                                     (shell {:dir "web"} "npx" "sirv" "dist" "--port" "8081" "--single")
-                                     (println "🌐 Test server running on http://localhost:8081"))}
-
-  ;; 🌍 DEPLOYMENT
-  deploy:github-pages {:doc "Deploy to GitHub Pages"
-                       :task (do (println "🚀 Deploying to GitHub Pages...")
-                                 (shell "bb" "build:all-github-pages")
-                                 (shell "git" "add" "-f" "web/dist")
-                                 (shell "git" "commit" "-m" "Deploy to GitHub Pages")
-                                 (shell "git" "push" "origin" "main")
-                                 (println "🎊 Deployed to GitHub Pages!"))}
-
-  ;; 📊 HEALTH & TESTING
-  health:check {:doc "System health verification"
-                :task (do (println "🔍 Checking galactic system health...")
-                          (println "✅ ClojureScript DSL: OK")
-                          (println "✅ SvelteKit Frontend: OK")
-                          (println "✅ Dual Build System: OK")
-                          (println "✅ GitHub Actions: OK")
-                          (println "🎊 System health: EXCELLENT!"))}
-
-  quality:check {:doc "Code quality analysis"
-                 :task (do (println "🔍 Running quality analysis...")
-                           (try
-                             (shell "clj-kondo" "--lint" "site-dsl/src" "--lint" "web/src")
-                             (println "✅ Code quality: EXCELLENT!")
-                             (catch Exception e
-                               (println "⚠️ clj-kondo not found - install for quality analysis"))))}
-
-  test:builds {:doc "Test both build variants"
-               :task (do (println "🔍 Testing galactic build pipelines...")
-                         (shell "bb" "clean")
-                         (println "1. Testing localhost build...")
-                         (shell "bb" "build:all-localhost")
-                         (println "2. Testing GitHub Pages build...")
-                         (shell "bb" "build:all-github-pages")
-                         (println "🎊 Both build variants successful!"))}}}
-
-;; 🌌 Enhanced Babashka configuration for galactic infrastructure
-;; 🖤🤎💙 Built with functional programming for post-industrial civilization
+ { :requires ([babashka.fs :as fs]
+              [babashka.process :refer [process shell]]
+              [clojure.string :as str])
+  doctor {:doc "Check toolchain availability"
+          :task (do (println "bb" (System/getProperty "babashka.version"))
+                    (shell "bash" "-lc" "node --version || true")
+                    (shell "bash" "-lc" "clojure -Sdescribe | head -n 5 || true")
+                    (shell "bash" "-lc" "npx vite --version || true")
+                    (shell "bash" "-lc" "clj-kondo --version || true")
+                    (shell "bash" "-lc" "zprint --version || true"))}
+  fmt {:doc "Format with zprint (80 cols)"
+       :task (shell "bash" "-lc" "zprint -w **/*.{clj,cljs,edn,bb,md} || true")}
+  fmt:check {:doc "Check formatting"
+             :task (shell "bash" "-lc" "git diff --quiet || (git status --porcelain; exit 1)")}
+  lint {:doc "Lint"
+        :task (shell "bash" "-lc" "clj-kondo --lint site-dsl scripts")}
+  build:gen {:doc "Parse docs -> Svelte + JSON"
+             :task (shell {:dir "site-dsl"} "bash" "-lc" "bb -m site.core")}
+  build:bundle {:doc "Vite bundle"
+                :task (shell {:dir "web"} "bash" "-lc" "npm pkg get name >/dev/null 2>&1 || npm init -y; npm i -D svelte @sveltejs/vite-plugin-svelte vite; npx vite build")}
+  build:all {:depends [build:gen build:bundle]}
+  serve {:doc "Serve static site"
+         :task (shell "bash" "-lc" "bb scripts/serve.clj")}
+  pages:build {:doc "Build for GitHub Pages"
+               :task (shell {:dir "web"} "bash" "-lc" "BASE_PATH=${BASE_PATH:-/} npx vite build")}
+  pages:bundle {:depends [build:gen pages:build]}
+  usdc:solana:ping {:doc "Placeholder" :task (println "TODO: solana-clj/web3.js")}
+  usdc:ethereum:ping {:doc "Placeholder" :task (println "TODO: ethers.js")}
+  ci:verify {:depends [doctor lint build:gen]}}}
