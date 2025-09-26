@@ -80,11 +80,11 @@ cd ~/risclovepbc/highvalleywake-pbc-galactic
 # OR
 cd ~/highvalleywake-pbc-galactic
 
-# 2. Bootstrap galactic environment
-bb bootstrap
+# 2. Build for localhost development
+bb build:all-localhost
 
-# 3. Start development mode
-bb dev
+# 3. Start local server
+bb serve
 
 # 4. Access your post-industrial civilization
 open http://localhost:8080
@@ -92,8 +92,8 @@ open http://localhost:8080
 
 ### **🌍 Production Deployment:**
 ```bash
-# Build and deploy to GitHub Pages
-bb deploy:github-pages
+# Build for GitHub Pages
+bb build:all-github-pages
 
 # Access at: https://foolsgoldtoshi-star.github.io/highvalleywake-pbc-galactic
 ```
@@ -177,23 +177,23 @@ Our documentation system uses **ClojureScript as the source of truth**, generati
 
 ### **🌱 Development:**
 ```bash
-bb dev                    # Start development mode
-bb serve:localhost        # Serve localhost build
 bb build:all-localhost    # Build for development
+bb serve                  # Start local server
+bb clean                  # Clean build artifacts
 ```
 
 ### **🌍 Production:**
 ```bash
 bb build:all-github-pages # Build for GitHub Pages
-bb deploy:github-pages    # Deploy to production
-bb serve:github-pages-test # Test production build locally
+bb test:builds           # Test both build variants
 ```
 
 ### **🧹 Maintenance:**
 ```bash
 bb clean                  # Clean build artifacts
-bb health:check          # System health verification
-bb quality:check         # Code quality analysis
+bb build:cljs-docs       # Generate ClojureScript documentation
+bb build:localhost       # Build localhost variant only
+bb build:github-pages    # Build GitHub Pages variant only
 ```
 
 ⸻
