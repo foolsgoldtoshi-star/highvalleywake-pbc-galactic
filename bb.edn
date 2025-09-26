@@ -25,7 +25,7 @@
   build:github-pages {:doc "Build optimized for GitHub Pages deployment"
                       :task (do (println "🌍 Building for GitHub Pages...")
                                 (shell {:dir "build-systems/github-pages"} "cp" "svelte.config.js" "../../web/")
-                                (shell {:dir "web"} "npm" "install")
+                                (shell {:dir "web"} "npm" "install" "--legacy-peer-deps")
                                 (shell {:dir "web" :env {"GITHUB_PAGES" "true" "PATH" (str (System/getenv "PATH"))}} "npm" "run" "build")
                                 (println "🚀 GitHub Pages build complete"))}
 
