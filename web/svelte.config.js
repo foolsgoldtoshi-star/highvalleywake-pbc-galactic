@@ -23,7 +23,7 @@ const config = {
 			]
 		},
 		paths: {
-			base: ''  // No base path for localhost development
+			base: '/highvalleywake-pbc-galactic'  // GitHub Pages path
 		},
 		alias: {
 			$content: 'static/content',
@@ -34,6 +34,6 @@ const config = {
 
 export default config;
 
-// 🌱 Localhost development optimized configuration
-// 🔧 Relative paths for seamless development
+// 🌍 GitHub Pages optimized configuration
+// 🚀 Production deployment with proper base paths
 // 🎊 Part of the galactic dual build system

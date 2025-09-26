@@ -2,8 +2,11 @@
   "name": "highvalleywake-galactic-web",
   "version": "2.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "dev": "vite dev",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.6",
