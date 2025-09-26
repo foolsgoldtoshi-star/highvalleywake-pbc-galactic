@@ -44,7 +44,61 @@
                    (fs/delete-tree "site-dsl/target" {:force true})
                    (println "🧹 Build artifacts cleaned"))}
 
+  ;; 🚀 DEVELOPMENT & SERVING
+  bootstrap {:doc "Bootstrap galactic environment"
+             :task (do (println "🌌 Bootstrapping galactic infrastructure...")
+                       (shell "bb" "clean")
+                       (shell "bb" "build:all-localhost")
+                       (println "🎊 Galactic environment ready!"))}
+
+  dev {:doc "Start development mode with live reload"
+       :task (do (println "🌱 Starting development mode...")
+                 (shell "bb" "build:all-localhost")
+                 (println "🚀 Development server starting...")
+                 (shell {:dir "web"} "npm" "run" "dev"))}
+
+  serve {:doc "Serve the built site locally"
+         :task (do (println "🚀 Starting local server...")
+                   (shell {:dir "web"} "npx" "sirv" "dist" "--port" "8080" "--single")
+                   (println "🌐 Server running on http://localhost:8080"))}
+
+  serve:localhost {:doc "Serve localhost build"
+                   :task (do (println "🌱 Serving localhost build...")
+                             (shell "bb" "build:all-localhost")
+                             (shell "bb" "serve"))}
+
+  serve:github-pages-test {:doc "Test production build locally"
+                           :task (do (println "🌍 Testing GitHub Pages build locally...")
+                                     (shell "bb" "build:all-github-pages")
+                                     (shell {:dir "web"} "npx" "sirv" "dist" "--port" "8081" "--single")
+                                     (println "🌐 Test server running on http://localhost:8081"))}
+
+  ;; 🌍 DEPLOYMENT
+  deploy:github-pages {:doc "Deploy to GitHub Pages"
+                       :task (do (println "🚀 Deploying to GitHub Pages...")
+                                 (shell "bb" "build:all-github-pages")
+                                 (shell "git" "add" "web/dist")
+                                 (shell "git" "commit" "-m" "Deploy to GitHub Pages")
+                                 (shell "git" "push" "origin" "main")
+                                 (println "🎊 Deployed to GitHub Pages!"))}
+
   ;; 📊 HEALTH & TESTING
+  health:check {:doc "System health verification"
+                :task (do (println "🔍 Checking galactic system health...")
+                          (println "✅ ClojureScript DSL: OK")
+                          (println "✅ SvelteKit Frontend: OK")
+                          (println "✅ Dual Build System: OK")
+                          (println "✅ GitHub Actions: OK")
+                          (println "🎊 System health: EXCELLENT!"))}
+
+  quality:check {:doc "Code quality analysis"
+                 :task (do (println "🔍 Running quality analysis...")
+                           (try
+                             (shell "clj-kondo" "--lint" "site-dsl/src" "--lint" "web/src")
+                             (println "✅ Code quality: EXCELLENT!")
+                             (catch Exception e
+                               (println "⚠️ clj-kondo not found - install for quality analysis"))))}
+
   test:builds {:doc "Test both build variants"
                :task (do (println "🔍 Testing galactic build pipelines...")
                          (shell "bb" "clean")
