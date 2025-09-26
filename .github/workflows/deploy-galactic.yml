@@ -2,9 +2,9 @@ name: 🌌 Deploy Galactic Infrastructure
 
 on:
   push:
-    branches: [ main, highvalley-wake ]
+    branches: [ pond-highdesert ]
   pull_request:
-    branches: [ main ]
+    branches: [ pond-highdesert ]
 
 permissions:
   contents: read

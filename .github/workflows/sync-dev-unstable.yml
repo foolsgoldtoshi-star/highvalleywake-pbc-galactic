@@ -1,0 +1,34 @@
+name: 🌊 Sync dev-unstable with pond-highdesert
+
+on:
+  push:
+    branches: [ pond-highdesert ]
+  workflow_dispatch:
+
+jobs:
+  sync-dev-unstable:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🌊 Checkout pond-highdesert
+      uses: actions/checkout@v4
+      with:
+        ref: pond-highdesert
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: 🌿 Configure Git
+      run: |
+        git config --global user.name "foolsgoldtoshi-star"
+        git config --global user.email "foolsgoldtoshi@gmail.com"
+
+    - name: ⚡ Force push to dev-unstable
+      run: |
+        echo "🌊 Syncing dev-unstable with pond-highdesert..."
+        git push origin pond-highdesert:dev-unstable --force
+        echo "✅ dev-unstable synced successfully!"
+
+    - name: 🎊 Sync Complete
+      run: |
+        echo "🎊 dev-unstable branch is now a forced mirror of pond-highdesert!"
+        echo "🌿 Rolling development branch strategy active!"

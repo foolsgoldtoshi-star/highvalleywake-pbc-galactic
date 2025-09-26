@@ -2,10 +2,12 @@
 
 **"Post-Industrial Ecological Civilization Documentation System"**
 
-🌱 **Status**: Galactic infrastructure v2.0 - Complete reorganization with dual build systems  
+🌱 **Status**: **ROLLING & UNSTABLE** - Active development on `pond-highdesert` branch  
 🏗️ **Architecture**: ClojureScript DSL + Dual Build System + MMT Integration + Blockchain Ready  
 💰 **Philosophy**: Rich Hickey meets Helen Atthowe meets NixOS meets Modern Monetary Theory  
 🚀 **Vision**: From functional farm documentation to interplanetary agricultural civilization
+
+⚠️ **WARNING**: This is a **rolling, unstable development branch**. Expect breaking changes, experimental features, and rapid iteration. For stable releases, see the `main` branch (when available).
 
 A **revolutionary approach** to civilization infrastructure where **documentation becomes executable code**, **builds are pure functions**, and **federal funding creates post-scarcity agriculture**.
 
@@ -30,6 +32,28 @@ A **revolutionary approach** to civilization infrastructure where **documentatio
 - **Federal Support**: USDA, Treasury, Federal Reserve integration framework
 - **Blockchain Ready**: Solana/Ethereum USDC routing preparation
 - **Tesla Logistics**: Autonomous delivery coordination infrastructure
+
+⸻
+
+## 🌿 **Branch Strategy**
+
+### **🌊 `pond-highdesert` (Default/Rolling)**
+- **Purpose**: Active development and experimentation
+- **Status**: Rolling, unstable, breaking changes expected
+- **Deployment**: GitHub Pages from this branch
+- **Philosophy**: "Pond high desert" - experimental, fluid, adaptive
+
+### **⚡ `dev-unstable` (Sync Branch)**
+- **Purpose**: Forced mirror of `pond-highdesert`
+- **Status**: Automatically synced via GitHub Actions
+- **Deployment**: CI artifacts only, no live deployment
+- **Philosophy**: "Dev unstable" - rapid iteration, experimental features
+
+### **🏛️ `main` (Future Stable)**
+- **Purpose**: Stable releases (when available)
+- **Status**: Currently deleted, will be recreated for stable releases
+- **Deployment**: Production-ready releases
+- **Philosophy**: "Main" - stable, tested, production-ready
 
 ⸻
 
@@ -80,13 +104,16 @@ cd ~/risclovepbc/highvalleywake-pbc-galactic
 # OR
 cd ~/highvalleywake-pbc-galactic
 
-# 2. Bootstrap galactic environment
+# 2. Switch to rolling development branch
+git checkout pond-highdesert
+
+# 3. Bootstrap galactic environment
 bb bootstrap
 
-# 3. Start development mode
+# 4. Start development mode
 bb dev
 
-# 4. Access your post-industrial civilization
+# 5. Access your post-industrial civilization
 open http://localhost:8080
 ```
 
