@@ -1,0 +1,34 @@
+# 🌌 Galactic Infrastructure .gitignore
+# For post-industrial ecological civilization development
+
+# 📦 Node.js dependencies
+node_modules/
+package-lock.json
+*.log
+
+# 🔧 Build outputs
+dist/
+build/
+.svelte-kit/
+target/
+.shadow-cljs/
+
+# 🌱 Development files
+.DS_Store
+.env
+.env.*
+
+# 🔐 Security sensitive files
+*.pem
+*.key
+*.cert
+id_rsa*
+
+# 🎊 Keep our source files
+!*.clj
+!*.cljs
+!*.edn
+!*.md
+
+# 🌌 Galactic infrastructure gitignore  
+# 🖤🤎💙 Built by foolsgoldtoshi-star
