@@ -18,15 +18,15 @@
   build:localhost {:doc "Build optimized for localhost development"
                    :task (do (println "🌱 Building for localhost development...")
                              (shell {:dir "build-systems/localhost"} "cp" "svelte.config.js" "../../web/")
-                             (shell {:dir "web"} "npm" "ci")
+                             (shell {:dir "web"} "npm" "install")
                              (shell {:dir "web"} "npm" "run" "build")
                              (println "🖤 Localhost build complete"))}
 
   build:github-pages {:doc "Build optimized for GitHub Pages deployment"
                       :task (do (println "🌍 Building for GitHub Pages...")
                                 (shell {:dir "build-systems/github-pages"} "cp" "svelte.config.js" "../../web/")
-                                (shell {:dir "web" :env {"GITHUB_PAGES" "true"}} "npm" "ci")
-                                (shell {:dir "web" :env {"GITHUB_PAGES" "true"}} "npm" "run" "build")
+                                (shell {:dir "web"} "npm" "install")
+                                (shell {:dir "web" :env {"GITHUB_PAGES" "true" "PATH" (str (System/getenv "PATH"))}} "npm" "run" "build")
                                 (println "🚀 GitHub Pages build complete"))}
 
   build:all-localhost {:doc "Complete localhost build pipeline"
@@ -53,7 +53,8 @@
 
   dev {:doc "Start development mode with live reload"
        :task (do (println "🌱 Starting development mode...")
-                 (shell "bb" "build:all-localhost")
+                 (shell {:dir "build-systems/localhost"} "cp" "svelte.config.js" "../../web/")
+                 (shell {:dir "web"} "npm" "install")
                  (println "🚀 Development server starting...")
                  (shell {:dir "web"} "npm" "run" "dev"))}
 
@@ -77,7 +78,7 @@
   deploy:github-pages {:doc "Deploy to GitHub Pages"
                        :task (do (println "🚀 Deploying to GitHub Pages...")
                                  (shell "bb" "build:all-github-pages")
-                                 (shell "git" "add" "web/dist")
+                                 (shell "git" "add" "-f" "web/dist")
                                  (shell "git" "commit" "-m" "Deploy to GitHub Pages")
                                  (shell "git" "push" "origin" "main")
                                  (println "🎊 Deployed to GitHub Pages!"))}
